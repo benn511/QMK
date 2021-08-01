@@ -16,6 +16,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
+#define _BASE_LAYER 0
+#define _SPACE_LAYER 1
+#define _FN_LAYER 2
+#define _ALT_LAYER 3
+
 //Tap Dance Declarations
 enum {
   TD_LEFT_CURLY = 0,
@@ -195,17 +200,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //
     // To put the keyboard in bootloader mode, use FN+backslash. If you accidentally put it into bootloader, you can just unplug the USB cable and
     // it'll be back to normal when you plug it back in.
-    [0] = LAYOUT(
+    [_BASE_LAYER] = LAYOUT(
         KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DELETE,          KC_MUTE,
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
 
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    TD(TD_LEFT_CURLY), TD(TD_RIGHT_CURLY), KC_BSLS,          KC_PGDN,
         KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, TD(TD_QUOTES),          KC_ENT,           TD(TD_HOME_DANCE),
         KC_LSPO,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSPC, KC_UP,   KC_END,
-        KC_LCTL, KC_LGUI, LM(3, MOD_LALT),                            LT(2,KC_SPC),                             KC_RALT, TT(1),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+        KC_LCTL, KC_LGUI, LM(_ALT_LAYER, MOD_LALT),                            LT(_SPACE_LAYER,KC_SPC),                             KC_RALT, TT(_FN_LAYER),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
+    [_SPACE_LAYER] = LAYOUT(
+        KC_ESC, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DELETE,          _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_BSPC,          _______,
 
-    [1] = LAYOUT(
+        _______, KC_Q, KC_LBRACKET, KC_ESC, S(KC_7), KC_T, KC_Y, KC_MINS, S(KC_DOT), S(KC_LBRACKET), _______, GIT_ADD, GIT_COMMIT, SPLIT_EDITOR,            _______,
+        _______, S(KC_1), S(KC_2), S(KC_3), S(KC_4), KC_HOME, KC_END, S(KC_MINUS), S(KC_EQUAL), S(KC_QUOTE), KC_EQUAL, _______,          _______,          _______,
+        _______,          _______, _______, S(KC_1), KC_EQUAL, KC_B, C(KC_BSPC), KC_BSPC, _______, _______, S(KC_BSLASH),          _______, _______, _______,
+        _______, _______, _______,                            _______,                            _______, _______, _______, C(S(KC_LEFT)), _______, C(S(KC_RIGHT))
+    ),
+    [_FN_LAYER] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
         _______, _______, KC_7, KC_8, KC_9, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
 
@@ -214,16 +227,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,          _______, C(KC_X), C(KC_C), C(KC_V), _______, _______, _______, _______, _______, _______,          _______, _______, _______,
         _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______, _______
     ),
-    [2] = LAYOUT(
-        KC_ESC, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-
-        _______, _______, KC_UP, S(KC_4), _______, _______, _______, _______, _______, _______, _______, GIT_ADD, GIT_COMMIT, SPLIT_EDITOR,            _______,
-        _______, S(KC_1), S(KC_2), S(KC_3), S(KC_4), KC_HOME, KC_END, S(KC_MINUS), S(KC_EQUAL), S(KC_QUOTE), KC_EQUAL, _______,          _______,          _______,
-        _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______,
-        _______, _______, _______,                            _______,                            _______, _______, _______, C(S(KC_LEFT)), _______, C(S(KC_RIGHT))
-    ),
-    [3] = LAYOUT(
+    [_ALT_LAYER] = LAYOUT(
         KC_ESC, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
 
