@@ -15,11 +15,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
+#include "rgb_matrix_map.h"
+
 
 #define _BASE_LAYER 0
 #define _SPACE_LAYER 1
 #define _FN_LAYER 2
 #define _ALT_LAYER 3
+#define _COLEMAK_LAYER 4
+#define _NUMBER_LAYER 5
+#define _RIGHT_CTRL_LAYER 6
+#define _WINDOWS_LAYER 7
 
 //Tap Dance Declarations
 enum {
@@ -204,22 +210,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DELETE,          KC_MUTE,
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
 
-        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    TD(TD_LEFT_CURLY), TD(TD_RIGHT_CURLY), KC_BSLS,          KC_PGDN,
+        LT(_NUMBER_LAYER, KC_TAB),  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    TD(TD_LEFT_CURLY), TD(TD_RIGHT_CURLY), KC_BSLS,          KC_PGDN,
         KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, TD(TD_QUOTES),          KC_ENT,           TD(TD_HOME_DANCE),
         KC_LSPO,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSPC, KC_UP,   KC_END,
-        KC_LCTL, KC_LGUI, LM(_ALT_LAYER, MOD_LALT),                            LT(_SPACE_LAYER,KC_SPC),                             KC_RALT, TT(_FN_LAYER),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+        KC_LCTL, KC_LGUI, KC_LALT,                            LT(_SPACE_LAYER,KC_SPC),                             KC_RALT, TT(_COLEMAK_LAYER),   LT(_RIGHT_CTRL_LAYER, KC_ESC), KC_LEFT, KC_DOWN, KC_RGHT
     ),
     [_SPACE_LAYER] = LAYOUT(
-        KC_ESC, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DELETE,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_BSPC,          _______,
+        KC_ESC, RESET, RGB_VAI, RGB_SAI, RGB_HUI, _______, NK_TOGG, RGB_SPI, _______, _______, _______, _______, _______, KC_DELETE,          _______,
+        _______, RGB_MOD, RGB_MODE_PLAIN, RGB_MODE_RAINBOW, RGB_MODE_SWIRL, _______, _______, _______, _______, _______, _______, _______, _______, KC_BSPC,          _______,
 
-        _______, KC_Q, KC_LBRACKET, KC_ESC, S(KC_7), KC_T, KC_Y, KC_MINS, S(KC_DOT), S(KC_LBRACKET), _______, GIT_ADD, GIT_COMMIT, SPLIT_EDITOR,            _______,
-        _______, S(KC_1), S(KC_2), S(KC_3), S(KC_4), KC_HOME, KC_END, S(KC_MINUS), S(KC_EQUAL), S(KC_QUOTE), KC_EQUAL, _______,          _______,          _______,
+        KC_TAB, KC_LBRACKET, KC_RBRACKET, KC_ESC, S(KC_7), KC_T, KC_Y, KC_HOME, KC_END, S(KC_LBRACKET), _______, GIT_ADD, GIT_COMMIT, SPLIT_EDITOR,            _______,
+        _______, S(KC_1), S(KC_2), KC_SPACE, S(KC_4), KC_HOME, KC_END, S(KC_MINUS), S(KC_EQUAL), S(KC_QUOTE), KC_EQUAL, _______,          _______,          _______,
         _______,          _______, _______, S(KC_1), KC_EQUAL, KC_B, C(KC_BSPC), KC_BSPC, _______, _______, S(KC_BSLASH),          _______, _______, _______,
         _______, _______, _______,                            _______,                            _______, _______, _______, C(S(KC_LEFT)), _______, C(S(KC_RIGHT))
     ),
     [_FN_LAYER] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        RESET, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
         _______, _______, KC_7, KC_8, KC_9, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
 
         _______, _______, KC_4, KC_5, KC_6, _______, _______, _______, _______, _______, _______, _______, _______, RESET,            _______,
@@ -228,16 +234,105 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______, _______
     ),
     [_ALT_LAYER] = LAYOUT(
-        KC_ESC, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        KC_ESC, RGB_VAI, RGB_SAI, RGB_HUI, _______, NK_TOGG, RGB_SPI, _______, _______, _______, _______, _______, _______, RGB_TOG,          _______,
+        _______, RGB_MOD, RGB_MODE_PLAIN, RGB_MODE_RAINBOW, RGB_MODE_SWIRL, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
 
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_UP, _______, _______, _______, _______, _______,            _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, KC_UP, _______, _______, _______, _______, RESET,            _______,
         _______, _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RIGHT, _______, _______,          _______,          _______,
         _______,          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______,
         _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______, _______
     ),
+    [_COLEMAK_LAYER] = LAYOUT(
+        KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   RESET,   KC_F10,  KC_F11,  KC_F12,  KC_DELETE,          KC_MUTE,
+        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
+
+        KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN,    TD(TD_LEFT_CURLY), TD(TD_RIGHT_CURLY), KC_BSLS,          KC_PGDN,
+        KC_CAPS, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,    KC_M,    KC_N,    KC_E,    KC_I,    KC_O, TD(TD_QUOTES),          KC_ENT,           TD(TD_HOME_DANCE),
+        KC_LSPO,          KC_X,    KC_C,    KC_D,    KC_V,    KC_Z,    KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSPC, KC_UP,   KC_END,
+        KC_LCTL, KC_LGUI, LM(_ALT_LAYER, MOD_LALT),                            LT(_SPACE_LAYER,KC_SPC),                             KC_RALT, _______,   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+    ),
+    [_NUMBER_LAYER] = LAYOUT(
+        KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DELETE,          KC_MUTE,
+        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
+
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_4,    KC_5,    KC_6,    KC_P,    _______, _______, KC_BSLS,          KC_PGDN,
+        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_1,    KC_2,    KC_3,    KC_SCLN, _______,          KC_ENT,           _______,
+        KC_LSPO,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_0,    KC_DOT, KC_ENTER,  KC_SLSH,          KC_RSPC, KC_UP,   KC_END,
+        KC_LCTL, KC_LGUI, _______,                            _______,                             KC_RALT, _______,   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+    ),
+    [_RIGHT_CTRL_LAYER] = LAYOUT(
+        KC_ESC,  RESET,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DELETE,          KC_MUTE,
+        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
+
+        KC_TAB,  KC_Q,    S(KC_UP),    C(KC_HOME),    C(KC_END),    KC_T,    KC_Y,    KC_4,    KC_5,    KC_6,    KC_P,    _______, _______, KC_BSLS,          KC_PGDN,
+        KC_CAPS, C(S(KC_LEFT)),    S(KC_DOWN),    C(S(KC_RIGHT)),    C(KC_F),    KC_G,    KC_H,    KC_1,    KC_2,    KC_3,    KC_SCLN, _______,          KC_ENT,           _______,
+        KC_LSPO,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_0,    KC_DOT, KC_ENTER,  KC_SLSH,          KC_RSPC, KC_UP,   KC_END,
+        KC_LCTL, KC_LGUI, _______,                            _______,                             KC_RALT, _______,   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+    ),
+    [_WINDOWS_LAYER] = LAYOUT(
+        KC_ESC,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DELETE,          KC_MUTE,
+        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
+
+        KC_TAB,  KC_Q,    KC_W,    KC_END,    KC_HOME,    KC_T,    KC_Y,    KC_U,    S(KC_UP),    KC_O,    KC_P,    _______, _______, KC_BSLS,          KC_PGDN,
+        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    C(S(KC_LEFT)),    S(KC_DOWN),    C(S(KC_RIGHT)),    KC_SCLN, _______,          KC_ENT,           _______,
+        KC_LSPO,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_0,    KC_DOT, KC_ENTER,  KC_SLSH,          KC_RSPC, KC_UP,   KC_END,
+        KC_LCTL, KC_LGUI, _______,                            _______,                             KC_RALT, _______,   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+    ),
 
 };
+
+#ifdef RGB_MATRIX_ENABLE
+    // Capslock, Scroll lock and Numlock  indicator on Left side lights.
+    void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+        switch(get_highest_layer(layer_state)){  // special handling per layer
+        case _SPACE_LAYER:  // on Fn layer select what the encoder does when pressed
+            rgb_matrix_set_color(LED_SPC, RGB_GREEN); //FN key
+            for (uint8_t i=0; i<8; i++) {
+                rgb_matrix_set_color(LED_HOMEROW[i], RGB_GREEN);
+            }
+            for (uint8_t i=0; i<10; i++) {
+                rgb_matrix_set_color(LED_SPACE_LAYER_PAIRS[i], RGB_RED);
+            }
+
+            break;
+        case _NUMBER_LAYER:  // on Fn layer select what the encoder does when pressed
+            rgb_matrix_set_color(LED_R2, RGB_GREEN);
+            rgb_matrix_set_color(LED_R3, RGB_GREEN);
+            rgb_matrix_set_color(LED_R4, RGB_GREEN);
+            rgb_matrix_set_color(LED_FN, RGB_GREEN); //FN key
+            for (uint8_t i=0; i<12; i++) {
+                rgb_matrix_set_color(LED_LIST_NUMPAD[i], RGB_GREEN);
+            }
+
+            break;
+        case _ALT_LAYER:
+            rgb_matrix_set_color(LED_R2, RGB_GREEN);
+            for (uint8_t i=0; i<4; i++) {
+                rgb_matrix_set_color(LED_RIGHT_ARROWS[i], RGB_MAGENTA);
+            }
+            break;
+        case _RIGHT_CTRL_LAYER:
+            for (uint8_t i=0; i<3; i++) {
+                rgb_matrix_set_color(LED_RIGHT_CTRL_LAYER[i], RGB_RED);
+            }
+            for (uint8_t i=0; i<4; i++) {
+                rgb_matrix_set_color(LED_RIGHT_CTRL_WASD[i], RGB_GREEN);
+            }
+
+            break;
+        case _WINDOWS_LAYER:
+            for (uint8_t i=0; i<4; i++) {
+                rgb_matrix_set_color(LED_RIGHT_ARROWS[i], RGB_MAGENTA);
+            }
+
+            break;
+        default:
+            break;
+        }
+    }
+
+
+#endif
 
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
